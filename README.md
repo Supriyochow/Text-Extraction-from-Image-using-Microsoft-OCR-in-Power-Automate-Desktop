@@ -9,3 +9,6 @@ The process is:-
 6. SAve the excel sheet
 
 This is how a lot of task is automized using the Power Automate Desktop
+
+We extract the data from the given image 59421648.jpg and then store the values in the excel sheet Bill_Details.xlsx.
+The code for the power automate is in the file OCR_Excel.txt
