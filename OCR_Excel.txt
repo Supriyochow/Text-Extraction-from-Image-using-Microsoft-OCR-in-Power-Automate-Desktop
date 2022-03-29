@@ -1,0 +1,25 @@
+OCR.ExtractTextWithOCR.ExtractTextFromFileWithWindowsOcr ImageFile: $'''C:\\Users\\chowd\\Downloads\\59421648.jpg''' WindowsOcrLanguage: OCR.WindowsOcrLanguage.English ImageWidthMultiplier: 1 ImageHeightMultiplier: 1 OcrText=> OcrText
+IF (File.IfFile.Exists File: $'''C:\\Users\\chowd\\Downloads\\OCr.txt''') THEN
+    File.WriteText File: $'''C:\\Users\\chowd\\Downloads\\OCr.txt''' TextToWrite: OcrText AppendNewLine: True IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+    File.ReadTextFromFile.ReadTextAsList File: $'''C:\\Users\\chowd\\Downloads\\OCr.txt''' Encoding: File.TextFileEncoding.UTF8 Contents=> FileContents
+    Text.SplitText.Split Text: FileContents StandardDelimiter: Text.StandardDelimiter.NewLine DelimiterTimes: 1 Result=> TextList
+    SET Name TO FileContents[0]
+    SET Address TO $'''%TextList[2]%, 
+%TextList[3]%, 
+%TextList[4]%'''
+    SET Phone1 TO TextList[5]
+    SET Phone_Number TO Phone1[5:]
+    SET Date1 TO TextList[7]
+    SET Date TO Date1[6:14]
+    SET Total1 TO TextList[16]
+    SET Grand_Total TO Total1[20:23]
+    Display.ShowMessageDialog.ShowMessage Title: $'''Data''' Message: $'''Data Extracted''' Icon: Display.Icon.None Buttons: Display.Buttons.OK DefaultButton: Display.DefaultButton.Button1 IsTopMost: False ButtonPressed=> ButtonPressed
+END
+Excel.LaunchExcel.LaunchAndOpenUnderExistingProcess Path: $'''C:\\Users\\chowd\\Downloads\\Bill_Details.xlsx''' Visible: True ReadOnly: False Instance=> ExcelInstance
+Excel.WriteToExcel.WriteCell Instance: ExcelInstance Value: Name Column: $'''A''' Row: 2
+Excel.WriteToExcel.WriteCell Instance: ExcelInstance Value: Address Column: $'''B''' Row: 2
+Excel.WriteToExcel.WriteCell Instance: ExcelInstance Value: Phone_Number Column: $'''C''' Row: 2
+Excel.WriteToExcel.WriteCell Instance: ExcelInstance Value: Date Column: $'''D''' Row: 2
+Excel.WriteToExcel.WriteCell Instance: ExcelInstance Value: Grand_Total Column: $'''E''' Row: 2
+Display.ShowMessageDialog.ShowMessage Title: $'''Data ''' Message: $'''Data Inserted into Excel''' Icon: Display.Icon.None Buttons: Display.Buttons.OK DefaultButton: Display.DefaultButton.Button1 IsTopMost: False ButtonPressed=> ButtonPressed2
+Excel.CloseExcel.CloseAndSave Instance: ExcelInstance
